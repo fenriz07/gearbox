@@ -43,6 +43,8 @@ const (
 
 	// defaultMaxRequestURLLength is the maximum request url length
 	defaultMaxRequestURLLength = 2048
+
+	defaultReadBuffer = 4096
 )
 
 // HTTP methods were copied from net/http.
@@ -162,7 +164,7 @@ type Settings struct {
 
 	// Maximum size of LRU cache that will be used in routing if it's enabled
 	CacheSize int // default 1000
-	
+
 	// Per-connection buffer size for requests' reading.
 	// This also limits the maximum header size.
 	//
@@ -279,6 +281,10 @@ func New(settings ...*Settings) Gearbox {
 
 	if gb.settings.Concurrency <= 0 {
 		gb.settings.Concurrency = defaultConcurrency
+	}
+
+	if gb.settings.ReadBufferSize <= 0 {
+		gb.settings.ReadBufferSize = defaultReadBuffer
 	}
 
 	// Initialize router
